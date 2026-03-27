@@ -1,34 +1,24 @@
-import { isAxiosError } from 'axios';
-import { enqueueSnackbar } from 'notistack';
 import { configureAuth } from 'react-query-auth';
 import { Navigate, useLocation } from 'react-router-dom';
 import { z } from 'zod';
 
 import { paths } from '@/config/paths';
-import { AuthResponse, User } from '@/types/api';
+import { User } from '@/types/api';
 
-import { attachToken, loginApi } from './api-client';
+const hardcodedUser: User = {
+  id: '1',
+  firstname: 'Max',
+  lastname: 'Mustermann',
+  email: 'max.mustermann@beispiel.de',
+  userUUID: 'u-123-456-789',
+  country: {
+    countryId: 1,
+    name: 'DE',
+  },
+};
 
 const getUser = async (): Promise<User> => {
-  try {
-    const response = await loginApi.get('/api/v1/users/me', {
-      headers: attachToken().headers,
-    });
-    return response.data;
-  } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
-      const searchParams = new URLSearchParams();
-      const redirectTo = searchParams.get('redirectTo') ?? window.location.pathname;
-
-      if (window.location.pathname === paths.auth.login.path) {
-        return Promise.resolve({} as User);
-      } else {
-        window.location.href = paths.auth.login.getHref(redirectTo);
-      }
-    }
-
-    return Promise.reject(error);
-  }
+  return Promise.resolve(hardcodedUser);
 };
 
 const logout = async (): Promise<void> => {
@@ -43,22 +33,8 @@ export const loginInputSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
 const loginWithEmailAndPassword = async (data: LoginInput): Promise<User> => {
-  try {
-    const response = await loginApi.post<AuthResponse>('/api/v1/auth/login', null, {
-      params: data,
-    });
-    localStorage.setItem('accessToken', response.data.id_token);
-    return getUser();
-  } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
-      enqueueSnackbar('Provided credentials are invalid', {
-        variant: 'error',
-        preventDuplicate: true,
-      });
-    }
-
-    return Promise.reject(error);
-  }
+  localStorage.setItem('accessToken', 'hardcoded-token');
+  return getUser();
 };
 
 const authConfig = {
