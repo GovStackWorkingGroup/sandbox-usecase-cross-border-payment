@@ -1,5 +1,4 @@
-# Sandbox use case - Early Warning
-# Frontend of the Early Warning Prototype
+# Sandbox use case - Cross border payment
 
 ```bash
 cp .env.example .env
