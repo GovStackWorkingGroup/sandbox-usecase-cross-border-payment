@@ -60,6 +60,13 @@ export const logApi = Axios.create({
 logApi.interceptors.request.use(authRequestInterceptor);
 logApi.interceptors.response.use(handleApiResponse, handleApiError);
 
+export const bulkProcessorApi = Axios.create({
+  baseURL: env.BULK_PROCESSOR_URL,
+});
+
+bulkProcessorApi.interceptors.request.use(authRequestInterceptor);
+bulkProcessorApi.interceptors.response.use(handleApiResponse, handleApiError);
+
 export const attachToken = (headers?: Record<string, string>) => {
   const accessToken = localStorage.getItem('accessToken');
 

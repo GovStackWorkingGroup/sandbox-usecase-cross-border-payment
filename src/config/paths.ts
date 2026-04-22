@@ -41,6 +41,9 @@ export const paths = {
       path: "transactions-batch-roadmap",
       getHref: () => '/transactions-batch-roadmap',
     },
-    
+    batch: {
+      path: 'batch',
+      getHref: () => '/batch',
+    },
   },
 } as const;

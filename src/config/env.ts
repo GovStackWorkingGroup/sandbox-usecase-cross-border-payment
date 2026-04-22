@@ -5,6 +5,7 @@ const createEnv = () => {
     USER_API_URL: z.string(),
     THREAT_API_URL: z.string(),
     LOG_API_URL: z.string(),
+    BULK_PROCESSOR_URL: z.string(),
     APP_URL: z.string().optional().default('http://localhost:3000'),
   });
 

@@ -80,6 +80,14 @@ export const createAppRouter = (queryClient: QueryClient) =>
           },
           ErrorBoundary: AppRootErrorBoundary,
         },
+        {
+          path: paths.app.batch.path,
+          lazy: async () => {
+            const { BatchRoute } = await import('./routes/batch');
+            return { Component: BatchRoute };
+          },
+          ErrorBoundary: AppRootErrorBoundary,
+        },
       ]
     },
 
