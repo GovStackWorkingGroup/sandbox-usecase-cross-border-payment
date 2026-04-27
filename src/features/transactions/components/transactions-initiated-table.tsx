@@ -15,10 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useInitiatedTransactions } from '@/hooks/initiated-transactions';
-import { InitiatedTransaction } from '@/types/api';
 import { paths } from '@/config/paths';
-import { getTransactionFeeAmount, getFeeAmount } from '@/utils/transactionConversions';
-import { convertZWGtoUSD } from '@/utils/transactionConversions';
 
 export const TransactionsInitiatedTable = () => {
   const { transactionsInitiated } = useInitiatedTransactions();
@@ -57,6 +54,7 @@ export const TransactionsInitiatedTable = () => {
               />
             </TableCell>
             <TableCell>Status</TableCell>
+            <TableCell>Batch ID</TableCell>
             <TableCell>Payee Identity</TableCell>
             <TableCell>Beneficiary Name</TableCell>
             <TableCell>Duration (s)</TableCell>
@@ -71,7 +69,7 @@ export const TransactionsInitiatedTable = () => {
         <TableBody>
           {transactionsInitiated.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={12} align="center">
+              <TableCell colSpan={13} align="center">
                 <Box sx={{ my: 8 }}>
                   <Typography>No initiated transactions yet.</Typography>
                   <Typography fontSize={14} sx={{ opacity: 0.8 }}>
@@ -110,6 +108,7 @@ export const TransactionsInitiatedTable = () => {
                     </Typography>
                   </Box>
                 </TableCell>
+                <TableCell>{row.batchId ?? '-'}</TableCell>
                 <TableCell>
                   {row.payeeIdentity}
                 </TableCell>
@@ -138,15 +137,13 @@ export const TransactionsInitiatedTable = () => {
                   })}
                 </TableCell>
                 <TableCell>
-                  <TableCell>
-                    <IconButton
-                      size="small"
-                      component={Link}
-                      to={paths.app.transactionInitiated.getHref(row.payeeIdentity)}
-                    >
-                      <Icon baseClassName="material-symbols-outlined">visibility</Icon>
-                    </IconButton>
-                  </TableCell>
+                  <IconButton
+                    size="small"
+                    component={Link}
+                    to={paths.app.transactionInitiated.getHref(row.payeeIdentity)}
+                  >
+                    <Icon baseClassName="material-symbols-outlined">visibility</Icon>
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))

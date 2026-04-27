@@ -45,20 +45,21 @@ export const Sidebar = ({ isSidebarOpen, openSidebar, numberOfTransactions }: Si
   useEffect(() => {
     setTransactionsInitiated(transactionsInitiated.length);
     if (numberOfTransactions !== undefined) {
-      setTxNumber(numberOfTransactions - transactionsInitiated.length);
+      setTxNumber(Math.max(0, numberOfTransactions - transactionsInitiated.length));
     }
   }, [transactionsInitiated, numberOfTransactions]);
   const navigation = [
     { name: 'Dashboard', to: paths.app.dashboard.getHref(), icon: 'space_dashboard' },
-    { name: 'Outstanding', to: paths.app.transactions.getHref(), icon: 'content_paste', count: txNumber }, // TODO: Add items count
-    { name: 'Payment-Log', to: paths.app.transactionsInitiated.getHref(), icon: <MenuBookTwoToneIcon />, count: txInitiated }, // TODO: Add items count
+    { name: 'Outstanding', to: paths.app.transactions.getHref(), icon: 'content_paste', count: txNumber },
+    { name: 'Payment-Log', to: paths.app.transactionsInitiated.getHref(), icon: <MenuBookTwoToneIcon />, count: txInitiated },
+    { name: 'Submit Batch', to: paths.app.batch.getHref(), icon: 'upload_file' },
     // { name: 'Feedbacks', to: paths.app.feedbacks.getHref(), icon: 'chat_bubble', count: 23, disabled: true }, // TODO: Add items count
     // { name: 'Map View', to: paths.app.mapView.getHref(), icon: 'map', disabled: true },
   ].filter(Boolean) as SideNavigationItem[];
 
   const footer = [
-    { name: 'link1', to: 'https://', icon: 'open_in_new' },
-    { name: 'link2', to: 'https://', icon: 'open_in_new' },
+    { name: 'GovStack', to: 'https://govstack.global/', icon: 'open_in_new' },
+    { name: 'Mifos', to: 'https://mifos.org/', icon: 'open_in_new' },
   ].filter(Boolean) as SideNavigationItem[];
 
   return (
