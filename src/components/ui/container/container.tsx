@@ -95,7 +95,6 @@ const Container = ({ title, tooltip, children, sx, button }: ContainerProps) => 
                         mt: 2,
                         backgroundColor: '#F8FAF0',
                         color: '#0fb0efff',
-                        border: `1px solid ${sx && typeof sx === 'object' && 'backgroundColor' in sx ? '#F8FAF0' : '#54624D'}`,
                         boxShadow: 'none',
                         width: 125,
                         ...button.sx,
