@@ -1,5 +1,7 @@
 # Sandbox use case - Cross border payment
 
+https://cross-border-pay.sandbox.govstack.global/
+
 ```bash
 cp .env.example .env
 yarn install
@@ -22,3 +24,8 @@ DEMO_VITE_APP_USER_API_URL=https://demo.mifos.io/fineract-provider/
 VITE_APP_USER_API_URL=https://projectname.playground.sandbox-playground.com
 VITE_APP_THREAT_API_URL=https://projectname.playground.sandbox-playground.com
 VITE_APP_LOG_API_URL=https://projectname.playground.sandbox-playground.com
+```
+    
+## Deployment
+
+https://github.com/GovStackWorkingGroup/sandbox-deployment
