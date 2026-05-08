@@ -39,32 +39,32 @@ function handleApiError(error: AxiosError<ErrorResponse>) {
 }
 
 export const loginApi = Axios.create({
-  baseURL: resolveBaseUrl('/proxy/user', env.USER_API_URL),
+  baseURL: resolveBaseUrl('/proxy/user', env.BACKEND_URL),
 });
 
 export const userApi = Axios.create({
-  baseURL: resolveBaseUrl('/proxy/user', env.USER_API_URL),
+  baseURL: resolveBaseUrl('/proxy/user', env.BACKEND_URL),
 });
 
 userApi.interceptors.request.use(authRequestInterceptor);
 userApi.interceptors.response.use(handleApiResponse, handleApiError);
 
 export const threatApi = Axios.create({
-  baseURL: resolveBaseUrl('/proxy/threat', env.THREAT_API_URL),
+  baseURL: resolveBaseUrl('/proxy/threat', env.BACKEND_URL),
 });
 
 threatApi.interceptors.request.use(authRequestInterceptor);
 threatApi.interceptors.response.use(handleApiResponse, handleApiError);
 
 export const logApi = Axios.create({
-  baseURL: resolveBaseUrl('/proxy/log', env.LOG_API_URL),
+  baseURL: resolveBaseUrl('/proxy/log', env.BACKEND_URL),
 });
 
 logApi.interceptors.request.use(authRequestInterceptor);
 logApi.interceptors.response.use(handleApiResponse, handleApiError);
 
 export const bulkProcessorApi = Axios.create({
-  baseURL: resolveBaseUrl('/proxy/bulk', env.BULK_PROCESSOR_URL),
+  baseURL: resolveBaseUrl('/proxy/bulk', env.BACKEND_URL),
 });
 
 bulkProcessorApi.interceptors.request.use(authRequestInterceptor);
