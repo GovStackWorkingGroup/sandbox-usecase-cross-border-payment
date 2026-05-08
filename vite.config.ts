@@ -15,32 +15,6 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), svgr(), viteTsconfigPaths()],
     server: {
       port: 3000,
-      proxy: {
-        '/proxy/user': {
-          target: runtimeEnv.VITE_APP_USER_API_URL,
-          changeOrigin: true,
-          secure: true,
-          rewrite: (path) => path.replace(/^\/proxy\/user/, ''),
-        },
-        '/proxy/threat': {
-          target: runtimeEnv.VITE_APP_THREAT_API_URL,
-          changeOrigin: true,
-          secure: true,
-          rewrite: (path) => path.replace(/^\/proxy\/threat/, ''),
-        },
-        '/proxy/log': {
-          target: runtimeEnv.VITE_APP_LOG_API_URL,
-          changeOrigin: true,
-          secure: true,
-          rewrite: (path) => path.replace(/^\/proxy\/log/, ''),
-        },
-        '/proxy/bulk': {
-          target: runtimeEnv.VITE_APP_BULK_PROCESSOR_URL,
-          changeOrigin: true,
-          secure: true,
-          rewrite: (path) => path.replace(/^\/proxy\/bulk/, ''),
-        },
-      },
     },
     preview: {
       port: 3000,
