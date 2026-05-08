@@ -87,6 +87,7 @@ export async function submitBatch({
   const id = parseInt(row[headers.indexOf('id')] || '0', 10);
   const payeeIdentifier = row[headers.indexOf('payee_identifier')] || '';
   const amount = parseFloat(row[headers.indexOf('amount')] || '0');
+  console.log('Submitting transaction with amount:', amount);
   const note = row[headers.indexOf('note')] || '';
 
   const result = await fetch(`${env.BACKEND_URL}/api/v1/transaction`, {
@@ -101,6 +102,7 @@ export async function submitBatch({
       note
     })
   });
+  console.log('Transaction submitted:', result);
 
   const responseData = await result.json();
   const batchId = parseBatchIdFromPollingPath(responseData?.PollingPath);
