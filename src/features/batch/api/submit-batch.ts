@@ -1,11 +1,8 @@
 import { mockAfricanBeneficiaries } from '@/mockdata/mock-african-beneficiaries';
 import { Beneficiary } from '@/types/api';
-import { bulkProcessorApi, threatApi } from '@/lib/api-client';
 import { env } from '@/config/env';
 
 export const TENANTS = ['greenbank', 'redbank', 'bluebank'] as const;
-
-// ---- CSV ↔ beneficiary helpers ----
 
 function normalizeMsisdn(phone: string): string {
   return phone.replace(/[+\-\s()]/g, '');
@@ -75,64 +72,37 @@ async function appendCsvToForm(form: FormData, csvFile: File): Promise<void> {
   form.append('data', csvBlob, csvFile.name);
 }
 
-async function generateSignature(
-  csvFile: File,
-  tenant: string,
-  correlationId: string,
-  privateKey: string,
-): Promise<string> {
-  const form = new FormData();
-  await appendCsvToForm(form, csvFile);
-
-  const signature = await threatApi.post<unknown, string>('/api/v1/util/x-signature', form, {
-    headers: {
-      'X-CorrelationID': correlationId,
-      'Platform-TenantId': tenant,
-      privateKey,
-    },
-    transformResponse: (data) => data,
-  });
-
-  return signature;
-}
-
 export async function submitBatch({
   csvFile,
-  tenant,
-  govstack,
-  registeringInstitution,
-  program,
-  privateKey = env.DEFAULT_PRIVATE_KEY_MIFOS,
   correlationId: providedCorrelationId,
 }: SubmitBatchParams): Promise<BatchSubmitResult> {
   const correlationId = providedCorrelationId ?? crypto.randomUUID();
 
-  const signature = await generateSignature(csvFile, tenant, correlationId, privateKey);
+  const csvText = await csvFile.text();
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) throw new Error('CSV file must contain at least a header and one data row');
+  const headers = lines[0].split(',');
+  const row = lines[1].split(',');
+  
+  const id = parseInt(row[headers.indexOf('id')] || '0', 10);
+  const payeeIdentifier = row[headers.indexOf('payee_identifier')] || '';
+  const amount = parseFloat(row[headers.indexOf('amount')] || '0');
+  const note = row[headers.indexOf('note')] || '';
 
-  const form = new FormData();
-  await appendCsvToForm(form, csvFile);
+  const result = await fetch(`${env.BACKEND_URL}/api/v1/transaction`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id,
+      payeeIdentifier,
+      amount,
+      note
+    })
+  });
 
-  const headers: Record<string, string> = {
-    'X-Signature': signature,
-    'X-CorrelationID': correlationId,
-    'Platform-TenantId': tenant,
-    type: 'csv',
-    filename: csvFile.name,
-    'X-CallbackURL': `http://ph-ee-connector-mock-payment-schema:8080/batches/${correlationId}/callback`,
-    Purpose: 'Batch payment',
-  };
-
-  if (govstack) {
-    headers['X-Registering-Institution-ID'] = registeringInstitution || tenant;
-    if (program) headers['X-Program-ID'] = program;
-  }
-
-  const result = await bulkProcessorApi.post<unknown, Record<string, unknown>>(
-    '/batchtransactions',
-    form,
-    { headers },
-  );
-
-  const batchId = parseBatchIdFromPollingPath(result?.PollingPath);
-  return { ...(result ?? {}), correlationId, batchId };
+  const responseData = await result.json();
+  const batchId = parseBatchIdFromPollingPath(responseData?.PollingPath);
+  return { ...responseData, correlationId, batchId };
 }

@@ -6,7 +6,7 @@ const createEnv = () => {
     THREAT_API_URL: z.string(),
     LOG_API_URL: z.string(),
     BULK_PROCESSOR_URL: z.string(),
-    DEFAULT_PRIVATE_KEY_MIFOS: z.string(),
+    BACKEND_URL: z.string(),
     APP_URL: z.string().optional().default('http://localhost:3000'),
   });
 
