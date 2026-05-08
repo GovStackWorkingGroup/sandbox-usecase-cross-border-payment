@@ -1,11 +1,8 @@
 import { mockAfricanBeneficiaries } from '@/mockdata/mock-african-beneficiaries';
 import { Beneficiary } from '@/types/api';
-import { bulkProcessorApi, threatApi } from '@/lib/api-client';
 import { env } from '@/config/env';
 
 export const TENANTS = ['greenbank', 'redbank', 'bluebank'] as const;
-
-// ---- CSV ↔ beneficiary helpers ----
 
 function normalizeMsisdn(phone: string): string {
   return phone.replace(/[+\-\s()]/g, '');
@@ -77,11 +74,6 @@ async function appendCsvToForm(form: FormData, csvFile: File): Promise<void> {
 
 export async function submitBatch({
   csvFile,
-  tenant,
-  govstack,
-  registeringInstitution,
-  program,
-  privateKey = env.DEFAULT_PRIVATE_KEY_MIFOS,
   correlationId: providedCorrelationId,
 }: SubmitBatchParams): Promise<BatchSubmitResult> {
   const correlationId = providedCorrelationId ?? crypto.randomUUID();
@@ -97,7 +89,7 @@ export async function submitBatch({
   const amount = parseFloat(row[headers.indexOf('amount')] || '0');
   const note = row[headers.indexOf('note')] || '';
 
-  const result = await fetch('https://cross-border-pay.sandbox.govstack.global/api/v1/transaction', {
+  const result = await fetch(`${env.BACKEND_URL}/api/v1/transaction`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

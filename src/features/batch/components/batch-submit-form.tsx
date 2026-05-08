@@ -67,7 +67,6 @@ export const BatchSubmitForm = () => {
   const [govstack, setGovstack] = useState(false);
   const [registeringInstitution, setRegisteringInstitution] = useState('');
   const [program, setProgram] = useState('');
-  const [privateKey, setPrivateKey] = useState(env.DEFAULT_PRIVATE_KEY_MIFOS);
   const [status, setStatus] = useState<Status>('idle');
   const [result, setResult] = useState<BatchSubmitResult | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -88,7 +87,6 @@ export const BatchSubmitForm = () => {
         govstack,
         registeringInstitution: registeringInstitution || undefined,
         program: program || undefined,
-        privateKey,
       });
       const matched = await matchBeneficiariesFromCsv(file);
       matched.forEach((b) =>
@@ -218,9 +216,7 @@ export const BatchSubmitForm = () => {
               <Typography variant="body2">Advanced</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField label="Private Key" multiline rows={4} fullWidth size="small" value={privateKey}
-                onChange={(e) => setPrivateKey(e.target.value)} disabled={busy}
-                slotProps={{ input: { sx: { fontFamily: 'monospace', fontSize: 11 } } }} />
+              <TextField />
             </AccordionDetails>
           </Accordion>
 
