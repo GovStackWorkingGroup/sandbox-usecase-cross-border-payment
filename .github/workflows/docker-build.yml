@@ -37,10 +37,3 @@ jobs:
           tags: |
             ghcr.io/govstackworkinggroup/sandbox-usecase-cross-border-payment:latest
             ghcr.io/govstackworkinggroup/sandbox-usecase-cross-border-payment:${{ github.sha }}
-          build-args: |
-            DEFAULT_PRIVATE_KEY_MIFOS=${{ secrets.DEFAULT_PRIVATE_KEY_MIFOS }}
-            DEMO_VITE_APP_USER_API_URL=${{ secrets.DEMO_VITE_APP_USER_API_URL }}
-            VITE_APP_BULK_PROCESSOR_URL=${{ secrets.VITE_APP_BULK_PROCESSOR_URL }}
-            VITE_APP_LOG_API_URL=${{ secrets.VITE_APP_LOG_API_URL }}
-            VITE_APP_THREAT_API_URL=${{ secrets.VITE_APP_THREAT_API_URL }}
-            VITE_APP_USER_API_URL=${{ secrets.VITE_APP_USER_API_URL }}
