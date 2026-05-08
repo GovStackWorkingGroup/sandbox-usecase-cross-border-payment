@@ -6,6 +6,9 @@ RUN yarn install
 
 COPY . .
 
+ARG VITE_APP_DOCKER_IMAGE_TAG=local
+ENV VITE_APP_DOCKER_IMAGE_TAG=$VITE_APP_DOCKER_IMAGE_TAG
+
 RUN yarn build
 
 FROM nginx:stable-alpine AS production

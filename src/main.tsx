@@ -4,7 +4,8 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { App } from './app';
 
-console.log("Last docker image tag was: f29bed5a305a728ea8b20ae003f5f0f727a42959")
+const dockerImageTag = import.meta.env.VITE_APP_DOCKER_IMAGE_TAG ?? 'unknown';
+console.log(`Docker image tag is: ${dockerImageTag}`);
 const root = document.getElementById('root');
 if (!root) throw new Error('No root element found');
 
